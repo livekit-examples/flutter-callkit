@@ -50,20 +50,9 @@ For real VoIP pushes, send a PushKit payload with optional `callerId` and `calle
 
 This example keeps the room connection in Dart. For a production app that must connect from a killed/background-only state, verify that a Flutter engine is available for your PushKit and CallKit answer path, or move the background connection path into native code.
 
-## Requirements
-
-Requires livekit_client with `AudioManager.setEngineAvailability` and `AudioSessionManagementMode.externalCallSystem` (currently the `hiroshi/audio-engine-availability` branch, via the local path dependency in `pubspec.yaml`).
-
-The path dependency expects this checkout layout:
-
-```text
-<workspace>/livekit/client-sdk-flutter    (branch hiroshi/audio-engine-availability)
-<workspace>/livekit-examples/flutter-callkit
-```
-
 ## Development
 
-Formatting follows the LiveKit SDKs. Run `swiftformat .` (rules ported from client-sdk-swift) and `dart format .` (120-column rules from client-sdk-flutter, see `analysis_options.yaml`) before committing.
+Run `swiftformat .` and `dart format .` before committing.
 
 ## Android
 

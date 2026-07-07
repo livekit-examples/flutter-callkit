@@ -29,8 +29,10 @@ dependencies:
   flutter:
     sdk: flutter
 
-  livekit_client:
-    path: ../../livekit/client-sdk-flutter
+  # TODO: bump to the release containing AudioManager.setEngineAvailability
+  # and AudioSessionManagementMode.externalCallSystem, then remove the local
+  # pubspec_overrides.yaml.
+  livekit_client: ^2.8.0
 
 dev_dependencies:
   flutter_test:
