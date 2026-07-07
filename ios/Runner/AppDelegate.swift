@@ -1,3 +1,19 @@
+/*
+ * Copyright 2026 LiveKit
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import AVFoundation
 import CallKit
 import Flutter
@@ -11,7 +27,7 @@ import UIKit
 
     override func application(
         _ application: UIApplication,
-        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?,
     ) -> Bool {
         callKit.setWebRTCAudioAvailable(false)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
@@ -87,7 +103,7 @@ private final class CallKitBridge: NSObject {
     func setWebRTCAudioAvailable(_ isAvailable: Bool) {
         LiveKitPlugin.setEngineAvailability(
             isInputAvailable: isAvailable,
-            isOutputAvailable: isAvailable
+            isOutputAvailable: isAvailable,
         )
     }
 
@@ -103,7 +119,7 @@ private final class CallKitBridge: NSObject {
         try session.setCategory(
             .playAndRecord,
             mode: .voiceChat,
-            options: [.allowBluetooth, .mixWithOthers]
+            options: [.allowBluetooth, .mixWithOthers],
         )
     }
 
@@ -215,20 +231,20 @@ private final class CallKitBridge: NSObject {
                 if let error = response as? FlutterError {
                     NSLog("Dart method \(method) failed: \(error.message ?? error.code)")
                     action.fail()
-                    self.provider.reportCall(with: callUUID, endedAt: Date(), reason: .failed)
-                    self.activeCallUUID = nil
+                    provider.reportCall(with: callUUID, endedAt: Date(), reason: .failed)
+                    activeCallUUID = nil
                     return
                 }
 
                 if let success = response as? Bool, success {
                     if action is CXStartCallAction {
-                        self.provider.reportOutgoingCall(with: callUUID, connectedAt: Date())
+                        provider.reportOutgoingCall(with: callUUID, connectedAt: Date())
                     }
                     action.fulfill()
                 } else {
                     action.fail()
-                    self.provider.reportCall(with: callUUID, endedAt: Date(), reason: .failed)
-                    self.activeCallUUID = nil
+                    provider.reportCall(with: callUUID, endedAt: Date(), reason: .failed)
+                    activeCallUUID = nil
                 }
             }
         }
@@ -269,7 +285,7 @@ extension CallKitBridge: CXProviderDelegate {
             "setMuted",
             arguments: ["callUUID": action.callUUID.uuidString, "muted": action.isMuted],
             action: action,
-            callUUID: action.callUUID
+            callUUID: action.callUUID,
         )
     }
 

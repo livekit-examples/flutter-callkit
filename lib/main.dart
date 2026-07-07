@@ -232,9 +232,7 @@ class _CallKitHomePageState extends State<CallKitHomePage> {
 
     await _invokeCallKit('simulateIncomingCall', {
       'callerId': 'livekit-demo',
-      'callerName': _callerController.text.trim().isEmpty
-          ? 'LiveKit Caller'
-          : _callerController.text.trim(),
+      'callerName': _callerController.text.trim().isEmpty ? 'LiveKit Caller' : _callerController.text.trim(),
     });
   }
 
@@ -339,16 +337,12 @@ class _CallKitHomePageState extends State<CallKitHomePage> {
               runSpacing: 12,
               children: [
                 FilledButton.icon(
-                  onPressed: _connecting || _hasRoom
-                      ? null
-                      : _startOutgoingCall,
+                  onPressed: _connecting || _hasRoom ? null : _startOutgoingCall,
                   icon: const Icon(Icons.call),
                   label: const Text('Start outgoing CallKit call'),
                 ),
                 FilledButton.tonalIcon(
-                  onPressed: _connecting || _hasRoom
-                      ? null
-                      : _simulateIncomingCall,
+                  onPressed: _connecting || _hasRoom ? null : _simulateIncomingCall,
                   icon: const Icon(Icons.call_received),
                   label: const Text('Simulate incoming call'),
                 ),
@@ -364,9 +358,7 @@ class _CallKitHomePageState extends State<CallKitHomePage> {
               title: const Text('Muted'),
               subtitle: const Text('Mirrors the CallKit mute action.'),
               value: _muted,
-              onChanged: _hasRoom
-                  ? (muted) => unawaited(_setMuted(muted, fromCallKit: false))
-                  : null,
+              onChanged: _hasRoom ? (muted) => unawaited(_setMuted(muted, fromCallKit: false)) : null,
             ),
             const SizedBox(height: 16),
             _InfoCard(
@@ -375,8 +367,7 @@ class _CallKitHomePageState extends State<CallKitHomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SelectableText(
-                    _voipToken ??
-                        'Run on a physical iOS device to receive a PushKit token.',
+                    _voipToken ?? 'Run on a physical iOS device to receive a PushKit token.',
                   ),
                   const SizedBox(height: 8),
                   OutlinedButton.icon(
