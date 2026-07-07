@@ -7,8 +7,11 @@ The example uses the following audio-session pattern:
 - CallKit and PushKit stay in native iOS code.
 - The LiveKit `Room` stays in Dart.
 - Native CallKit actions call into Dart over a method channel.
-- WebRTC audio engine availability is disabled until CallKit activates the `AVAudioSession`.
-- WebRTC manual audio mode is also enabled as an extra guard while the Flutter WebRTC plugin is starting up.
+- Dart sets `AudioSessionManagementMode.externalCallSystem` at startup, so LiveKit configures the session category and mode from engine lifecycle but never activates or deactivates the session. CallKit owns activation timing.
+- The AppDelegate gates the WebRTC audio engine with `LiveKitPlugin.setEngineAvailability`: off at launch, on in `provider(didActivate:)`, off again in `provider(didDeactivate:)`. This is safe to call before the Flutter engine exists (killed-state VoIP push wake). The plugin stores the value and applies it at registration.
+- Connecting the room and publishing the microphone happen inside CallKit action handlers while the engine is still gated off. The requests are honored as soon as CallKit activates the session and availability flips on.
+
+Apps that handle CallKit events in Dart (for example via a CallKit plugin) can use the Dart equivalent, `AudioManager.instance.setEngineAvailability`, from those event handlers instead of the native static.
 
 ## What it does
 
@@ -47,6 +50,10 @@ For real VoIP pushes, send a PushKit payload with optional `callerId` and `calle
 
 This example keeps the room connection in Dart. For a production app that must connect from a killed/background-only state, verify that a Flutter engine is available for your PushKit and CallKit answer path, or move the background connection path into native code.
 
+## Requirements
+
+Requires livekit_client with `AudioManager.setEngineAvailability` and `AudioSessionManagementMode.externalCallSystem` (currently the `hiroshi/audio-engine-availability` branch, via the local path dependency in `pubspec.yaml`).
+
 ## Android
 
-Android is included only so the Flutter project can open/run there. CallKit and PushKit are iOS-only; an Android native-call UI example would need a separate ConnectionService implementation.
+Android is included only so the Flutter project can open/run there. CallKit and PushKit are iOS-only. The Android equivalent is the Telecom framework (`androidx.core.telecom`) plus a phoneCall foreground service and a CallStyle full-screen intent notification, which is planned as a follow-up. `AudioSessionManagementMode.externalCallSystem` currently behaves like manual mode on Android and is reserved for that integration.

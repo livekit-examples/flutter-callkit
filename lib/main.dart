@@ -5,7 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:livekit_client/livekit_client.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // CallKit owns audio session activation. LiveKit keeps configuring the
+  // session category/mode from engine lifecycle but never activates or
+  // deactivates it. The engine itself is gated natively: the AppDelegate
+  // calls LiveKitPlugin.setEngineAvailability(false) at launch and flips it
+  // inside CallKit's didActivate/didDeactivate window.
+  if (Platform.isIOS) {
+    await AudioManager.instance.setAudioSessionManagementMode(
+      AudioSessionManagementMode.externalCallSystem,
+    );
+  }
+
   runApp(const CallKitExampleApp());
 }
 
