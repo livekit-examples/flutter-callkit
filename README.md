@@ -56,4 +56,4 @@ Requires livekit_client with `AudioManager.setEngineAvailability` and `AudioSess
 
 ## Android
 
-Android is included only so the Flutter project can open/run there. CallKit and PushKit are iOS-only. The Android equivalent is the Telecom framework (`androidx.core.telecom`) plus a phoneCall foreground service and a CallStyle full-screen intent notification, which is planned as a follow-up. `AudioSessionManagementMode.externalCallSystem` currently behaves like manual mode on Android and is reserved for that integration.
+Android is included only so the Flutter project can open/run there. CallKit and PushKit are iOS-only. The Android equivalent is the Telecom framework (`androidx.core.telecom`) plus a phoneCall foreground service and a CallStyle full-screen intent notification, which is planned as a follow-up. `AudioSessionManagementMode.externalCallSystem` currently behaves like automatic mode on Android, so setting it once at startup is safe for cross-platform apps, and the mode is reserved for that Telecom integration.
