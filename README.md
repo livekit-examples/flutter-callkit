@@ -54,6 +54,17 @@ This example keeps the room connection in Dart. For a production app that must c
 
 Requires livekit_client with `AudioManager.setEngineAvailability` and `AudioSessionManagementMode.externalCallSystem` (currently the `hiroshi/audio-engine-availability` branch, via the local path dependency in `pubspec.yaml`).
 
+The path dependency expects this checkout layout:
+
+```text
+<workspace>/livekit/client-sdk-flutter    (branch hiroshi/audio-engine-availability)
+<workspace>/livekit-examples/flutter-callkit
+```
+
+## Development
+
+Formatting follows the LiveKit SDKs. Run `swiftformat .` (rules ported from client-sdk-swift) and `dart format .` (120-column rules from client-sdk-flutter, see `analysis_options.yaml`) before committing.
+
 ## Android
 
 Android is included only so the Flutter project can open/run there. CallKit and PushKit are iOS-only. The Android equivalent is the Telecom framework (`androidx.core.telecom`) plus a phoneCall foreground service and a CallStyle full-screen intent notification, which is planned as a follow-up. `AudioSessionManagementMode.externalCallSystem` currently behaves like automatic mode on Android, so setting it once at startup is safe for cross-platform apps, and the mode is reserved for that Telecom integration.
