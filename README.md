@@ -2,6 +2,8 @@
 
 Flutter example showing how to pair the LiveKit Flutter SDK with native iOS CallKit and PushKit.
 
+Requires `livekit_client` 2.9.0 or later. The audio session and engine availability APIs used here are marked experimental in that release and may still change.
+
 The example uses the following audio-session pattern:
 
 - CallKit and PushKit stay in native iOS code.
