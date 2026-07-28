@@ -1,3 +1,7 @@
+// This example demonstrates the CallKit coordination APIs, which are
+// currently marked experimental in livekit_client.
+// ignore_for_file: experimental_member_use
+
 import 'dart:async';
 import 'dart:io';
 
